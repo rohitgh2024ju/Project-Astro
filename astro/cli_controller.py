@@ -6,7 +6,7 @@ from astro.storage.manager import (
     find_workspace_root,
 )
 from astro.parser.code_parser import get_all_py_files, CodeParser
-from astro.engine.file_dependency_graph import FileDependencyEngine
+from astro.engine.graph.file_dependency_graph import FileDependencyEngine
 
 
 # Text formatting

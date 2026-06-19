@@ -1,3 +1,15 @@
+## Subsystem
+
+Astro
+│
+├── Parser Engine
+├── File Dependency Graph Engine
+├── Symbol Dependency Graph Engine
+├── Unified Dependency Graph Engine
+├── Compatibility Analysis Graph Engine
+├── Integrity Analysis Engine
+└── Report Generator
+
 ## Version Scope
 
 This document describes the architecture of Astro V1.
@@ -301,3 +313,181 @@ manager.py
 ### Value
 
 Transforms Astro from a dependency tracker into a semantic code intelligence engine capable of reasoning across the entire codebase.
+
+
+### Compatibility Analysis Engine (CAE)
+
+Astro CAE is responsible for determining whether a project can run correctly in a environment.
+
+This Engine analyzes project requirements, runtime dependencies, operating system constraints, hardware requirements and external services to identify potential compatibility issues before deployment or execution
+
+## High-Level Architecture
+
+parser Engine json file
+          ↓
+compatibility Analysis Engine
+          ↓
+compatibility report
+
+## Core Components
+
+# 1. Requirement Discovery Engine
+
+Extract all project requirements from config files and source metadata.
+
+Inputs:
+- requirements.txt
+- pyproject.toml
+- package.json
+- Dockerfile
+- docker-compose.yml
+- files_metadata.json
+
+Outputs:
+- Project Requirements object
+
+Example:
+
+Project Requirements:
+
+Python >= 3.11
+FastAPI >= 0.115
+PostgreSQL >= 15
+Redis >= 7
+Linux supported
+
+# 2. Environment Discovery Engine
+
+Collect information about the host machine or target environment
+
+Collected Data:
+
+- Operating System
+- OS Version
+- CPU Architecture
+- Python Version
+- Installed Packages
+- Available RAM
+- GPU Information
+- Docker Availability
+- Compiler Versions
+
+Outputs:
+
+- Environment Project Object
+
+# 3. Compatibility Rule Engine
+
+Compare Project Requirements against Environment Profile
+
+Responsibilities:
+
+- Version validation
+- OS validation
+- Architecture validation
+- Runtime validation
+- Package validation
+- Service validation
+
+Outputs:
+
+Compatibility Findings
+
+Example:
+
+Severity: HIGH
+Issue:
+Project requires Python >= 3.11
+Detected Python 3.9
+
+# 4. Report Generator
+
+Purpose:
+Generate structured compatibility reports.
+
+Outputs:
+
+Human-readable report
+JSON report
+Future VS Code diagnostics
+
+Example:
+
+Compatibility Score: 78%
+
+Issues:
+
+Python Version Mismatch
+PostgreSQL Version Mismatch
+
+Warnings:
+
+Docker Not Installed
+
+## Compatibility Categories
+
+# Runtime Compatibility
+
+Checks:
+
+Python version
+Node version
+Java version
+Compiler versions
+
+Examples:
+
+Python 3.11 feature used on Python 3.9
+C23 project compiled using GCC 8
+
+# Package Compatibility
+
+Checks:
+
+Package version constraints
+Framework compatibility
+
+Examples:
+
+FastAPI requiring Pydantic v2
+NumPy version conflicts
+
+# Operating System Compatibility
+
+Checks:
+
+OS-specific modules
+OS-specific binaries
+Path assumptions
+
+Examples:
+
+fcntl on Windows
+winreg on Linux
+
+# Hardware Compatibility
+
+Checks:
+
+CPU architecture
+GPU requirements
+RAM requirements
+
+Examples:
+
+CUDA required but unavailable
+ARM system running x86-only binaries
+
+# Service Compatibility
+
+Checks:
+
+Database versions
+Redis versions
+
+# External dependencies
+
+Examples:
+
+PostgreSQL 15 required
+MySQL version mismatch

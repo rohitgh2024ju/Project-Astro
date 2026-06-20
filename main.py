@@ -1,5 +1,5 @@
 import sys  # noqa: E402
-from astro.cli_controller import run_add, run_check
+from astro.cli_controller import run_add, run_check, env_profile
 import os
 
 
@@ -35,6 +35,11 @@ def main():
         print(f"Astro check triggered: analyzing files in '{path}' for mutations...")
 
         run_check(path)
+
+    elif command == "doctor":
+        print("Env Profile-")
+        env_profile()
+
     else:
         print(f"UNKNOWN command: {command}\nAvailable commands: add, check")
 
@@ -43,3 +48,4 @@ if __name__ == "__main__":
     main()
 
 # python main.py add .
+# python main.py doctor

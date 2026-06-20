@@ -100,7 +100,7 @@ def run_add(project_path="."):
 
     # build environment metadata
     EnvEngine = EnvironmentDiscoveryEngine(os.path.join(workspace_root, ".astro"))
-    EnvEngine.run()
+    env_profile, _ = EnvEngine.run()
 
     # build graph
     fileEngine = FileDependencyEngine(workspace_root)
@@ -113,3 +113,15 @@ def run_check(project_path="."):
     )
     # Next play: Wire this up to call Layer 2 (GraphEngine + IntegrityAnalyzer)
     # and Layer 3 (ConfigAnalyzer) from here using files_metadata.json
+
+
+def env_profile(project_path="."):
+    workspace_root = find_workspace_root(project_path)
+    EnvEngine = EnvironmentDiscoveryEngine(os.path.join(workspace_root, ".astro"))
+    profile, delta_time = EnvEngine.run()
+    print(profile)
+    print(f"profile created {delta_time} days ago")
+    if delta_time > 30.00:
+        print(
+            f"This Profile is more than {delta_time} days old. We recommend to use refreshed Env Profile for better experience..."
+        )

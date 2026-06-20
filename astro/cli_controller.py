@@ -7,6 +7,7 @@ from astro.storage.manager import (
 )
 from astro.parser.code_parser import get_all_py_files, CodeParser
 from astro.engine.graph.file_dependency_graph import FileDependencyEngine
+from astro.engine.compatibility.environment_discovery import EnvironmentDiscoveryEngine
 
 
 # Text formatting
@@ -96,6 +97,10 @@ def run_add(project_path="."):
         print(
             f"{Color.BOLD}{Color.GREEN}Sync complete. {parsed_counter} files modified/added, {deleted_counter} files tracking deleted.{Color.RESET}"
         )
+
+    # build environment metadata
+    EnvEngine = EnvironmentDiscoveryEngine(os.path.join(workspace_root, ".astro"))
+    EnvEngine.run()
 
     # build graph
     fileEngine = FileDependencyEngine(workspace_root)

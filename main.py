@@ -24,9 +24,11 @@ def main():
 
         size_metadata = os.path.getsize("./.astro/files_metadata.json")
         size_file_graph = os.path.getsize("./.astro/file_graph.astro")
+        size_file_env = os.path.getsize("./.astro/env_profile.json")
 
         print(f"Metadata file size : {size_metadata / 1024:.2f} KB")
         print(f"File Dependency file size : {size_file_graph / 1024:.2f} KB")
+        print(f"Environmental Profile file size : {size_file_env / 1024:.2f} KB")
 
     elif command == "check":
         path = arguments[1] if len(arguments) > 1 else "."

@@ -113,24 +113,48 @@ class EnvironmentDiscoveryEngine:
     # Get total ram info across all os
     def _get_total_ram(self) -> float:
         try:
+            # POSIX Standard Path (Linux / macOS)
             return round(
                 os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES") / (1024**3), 2
             )
         except (ValueError, AttributeError):
             pass
 
-        try:
-            res = subprocess.run(
-                ["wmic", "ComputerSystem", "get", "TotalPhysicalMemory"],
-                stdout=subprocess.PIPE,
-                text=True,
-            )
-            lines = res.stdout.strip().split("\n")
-            if len(lines) > 1:
-                bytes_ram = int(lines[1].strip())
-                return round(bytes_ram / (1024**3), 2)
-        except Exception:
-            return -1.0
+        # Robust Windows Path (Handles wmic deprecation)
+        if platform.system() == "Windows":
+            try:
+                # Fallback to standard PowerShell query - completely native on Windows
+                res = subprocess.run(
+                    [
+                        "powershell",
+                        "-Command",
+                        "(Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory",
+                    ],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                )
+                if res.returncode == 0 and res.stdout.strip().isdigit():
+                    bytes_ram = int(res.stdout.strip())
+                    return round(bytes_ram / (1024**3), 2)
+            except Exception:
+                pass
+
+            # Deprecated WMIC legacy path as a secondary fallback
+            try:
+                res = subprocess.run(
+                    ["wmic", "ComputerSystem", "get", "TotalPhysicalMemory"],
+                    stdout=subprocess.PIPE,
+                    text=True,
+                )
+                lines = res.stdout.strip().split("\n")
+                if len(lines) > 1 and lines[1].strip().isdigit():
+                    bytes_ram = int(lines[1].strip())
+                    return round(bytes_ram / (1024**3), 2)
+            except Exception:
+                pass
+
+        return -1.0
 
     # Get external service tools
     def _get_tools_available(self) -> Dict[str, bool]:

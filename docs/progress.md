@@ -25,3 +25,16 @@
 [x] Record Global Variable
 
 - track all global variable and check how global valuable is used
+
+
+## CAE
+
+successfully define environment profile of any device
+
+# next steps
+
+[] capturing project requirements
+
+[] comparing with env profile of host machine
+
+[] analyze & generate report

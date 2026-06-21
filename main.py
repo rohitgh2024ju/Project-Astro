@@ -1,5 +1,5 @@
 import sys  # noqa: E402
-from astro.cli_controller import run_add, run_check, env_profile
+from astro.cli_controller import run_add, run_check, env_profile, refresh_env_profile
 import os
 
 
@@ -36,9 +36,11 @@ def main():
 
         run_check(path)
 
-    elif command == "doctor":
-        print("Env Profile-")
+    elif command == "envp":
         env_profile()
+
+    elif command == "ref-envp":
+        refresh_env_profile()
 
     else:
         print(f"UNKNOWN command: {command}\nAvailable commands: add, check")
@@ -48,4 +50,5 @@ if __name__ == "__main__":
     main()
 
 # python main.py add .
-# python main.py doctor
+# python main.py envp
+# python main.py ref-envp

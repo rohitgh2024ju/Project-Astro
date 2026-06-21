@@ -117,11 +117,20 @@ def run_check(project_path="."):
 
 def env_profile(project_path="."):
     workspace_root = find_workspace_root(project_path)
+
     EnvEngine = EnvironmentDiscoveryEngine(os.path.join(workspace_root, ".astro"))
     profile, delta_time = EnvEngine.run()
-    print(profile)
+    print(f"Env Profile-\n{profile}")
     print(f"profile created {delta_time} days ago")
     if delta_time > 30.00:
         print(
-            f"This Profile is more than {delta_time} days old. We recommend to use refreshed Env Profile for better experience..."
+            f"{Color.RED}{Color.BOLD}This Profile is more than {delta_time} days old. We recommend to use refreshed Env Profile more frequently for better experience...{Color.RESET}"
         )
+
+
+def refresh_env_profile(project_path="."):
+    workspace_root = find_workspace_root(project_path)
+    EnvEngine = EnvironmentDiscoveryEngine(os.path.join(workspace_root, ".astro"))
+    profile, _ = EnvEngine.run(force_refresh=True)
+
+    print(f"{Color.GREEN}{Color.BOLD}Refreshed Env Profile{Color.RESET}\n{profile}")

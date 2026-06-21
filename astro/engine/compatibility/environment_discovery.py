@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import re
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 import json
 
 
@@ -27,8 +27,7 @@ class EnvironmentDiscoveryEngine:
         self.astro_dir = astro_dir
         self.cache_path = os.path.join(astro_dir, "env_profile.json")
 
-
-    def get_profile(self, force_refresh: bool = False) -> Dict[str, Any]:
+    def get_profile(self, force_refresh: bool = False) -> Tuple[Dict[str, Any], int]:
         if not force_refresh and os.path.exists(self.cache_path):
             try:
                 with open(self.cache_path, "r") as f:
@@ -38,10 +37,12 @@ class EnvironmentDiscoveryEngine:
                 if profile and profile.get("schema_version") == 1:
                     self.profile = profile
 
-                    profile_time = datetime.fromisoformat(profile["metadata"]["generated_at"])
+                    profile_time = datetime.fromisoformat(
+                        profile["metadata"]["generated_at"]
+                    )
                     current_time = datetime.now()
 
-                    delta = (current_time- profile_time).days
+                    delta = (current_time - profile_time).days
 
                     return self.profile, delta
             except Exception:
@@ -49,7 +50,7 @@ class EnvironmentDiscoveryEngine:
 
         return self.refresh_cache()
 
-    def refresh_cache(self) -> Dict[str, Any]:
+    def refresh_cache(self) -> Tuple[Dict[str, Any], int]:
         if not os.path.exists(self.astro_dir):
             os.makedirs(self.astro_dir, exist_ok=True)
 
@@ -66,9 +67,7 @@ class EnvironmentDiscoveryEngine:
     def collect_profile(self) -> Dict[str, Any]:
         return {
             "schema_version": 1,
-            "metadata": {
-                "generated_at": datetime.datetime.now().isoformat(timespec="seconds")
-            },
+            "metadata": {"generated_at": datetime.now().isoformat(timespec="seconds")},
             "os": self._get_os_info(),
             "runtime": self._get_runtime_info(),
             "hardware": self._get_hardware_info(),
@@ -174,7 +173,7 @@ class EnvironmentDiscoveryEngine:
         return details
 
     # Run engine entry point
-    def run(self, force_refresh: bool = False) -> Dict[str, Any]:
+    def run(self, force_refresh: bool = False) -> Tuple[Dict[str, Any], int]:
         return self.get_profile(force_refresh)
 
 

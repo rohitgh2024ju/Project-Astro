@@ -10,7 +10,6 @@ PY_LANGUAGE = Language(tsPython.language())
 # get all .py files
 def get_all_py_files(root_path):
     py_files = []
-
     ignored_directories = {
         ".astro",
         ".git",
@@ -74,13 +73,10 @@ class CodeParser:
             .replace("(", "")
             .replace(")", "")
         )
-
         parts = [s.strip() for s in cleaned_sym.split(",") if s.strip()]
-
         final_symbols = [
             part.split(" as ")[0].strip() if " as " in part else part for part in parts
         ]
-
         return final_symbols
 
     def _traverse(self, node):

@@ -8,6 +8,7 @@ from astro.storage.manager import (
 from astro.parser.code_parser import get_all_py_files, CodeParser
 from astro.engine.file_dependency_graph import FileDependencyEngine
 from astro.engine.symbol_depencency_graph import SymbolDependencyEngine
+from astro.engine.unified_dependency_graph import UnifiedDependencyEngine
 
 # Text formatting
 class Color:
@@ -103,6 +104,9 @@ def run_add(project_path="."):
     
     symbolEngine = SymbolDependencyEngine(workspace_root)
     symbolEngine.run()
+    
+    unifiedEngine = UnifiedDependencyEngine(workspace_root)
+    unifiedEngine.run()
     
 
 
